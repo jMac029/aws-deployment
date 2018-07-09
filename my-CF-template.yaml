@@ -28,26 +28,38 @@ Resources:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
+      AvailabilityZone: us-west-2a
       CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: Public-Subnet-1-10.0.1.0
+        - Key: Application
+          Value: !Ref 'AWS::StackId'
   PublicSubnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
+      AvailabilityZone: us-west-2b
       CidrBlock: 10.0.2.0/24
+      MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: Public-Subnet-2-10.0.2.0
+        - Key: Application
+          Value: !Ref 'AWS::StackId'
   PrivateSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
+      AvailabilityZone: us-west-2c
       CidrBlock: 10.0.3.0/24
+      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: Private-Subnet-10.0.3.0
+        - Key: Application
+          Value: !Ref 'AWS::StackId'
   InternetGateway:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -76,8 +88,9 @@ Resources:
   SubnetRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref PublicSubnet1
-      SubnetId: !Ref PublicSubnet2
+      SubnetId: 
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
       RouteTableId: !Ref RouteTable
   NetworkAcl:
     Type: 'AWS::EC2::NetworkAcl'
@@ -161,8 +174,9 @@ Resources:
   SubnetNetworkAclAssociation:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
-      SubnetId: !Ref PublicSubnet1
-      SubnetId: !Ref PublicSubnet2
+      SubnetId: 
+        - !Ref: PublicSubnet1
+        - !Ref: PublicSubnet2
       NetworkAclId: !Ref NetworkAcl
   IPAddress:
     Type: 'AWS::EC2::EIP'
@@ -186,8 +200,9 @@ Resources:
   WebServerGroup:
     Type: 'AWS::AutoScaling::AutoScalingGroup'
     Properties:
-      VPCZoneIdentifier: !Ref PublicSubnet1
-      VPCZoneIdentifier: !Ref PublicSubnet2
+      VPCZoneIdentifier: 
+        - !Ref: PublicSubnet1
+        - !Ref: PublicSubnet2
       LaunchConfigurationName: !Ref LaunchConfig
       MinSize: '2'
       MaxSize: '6'
@@ -232,8 +247,9 @@ Resources:
   ApplicationLoadBalancer:
     Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
     Properties:
-      Subnets: !Ref PublicSubnet1
-      Subnets: !Ref PublicSubnet2
+      Subnets: 
+        - !Ref: PublicSubnet1
+        - !Ref: PublicSubnet2
       SecurityGroups:
         - !Ref LoadBalancerSecurityGroup
   ALBListener:
