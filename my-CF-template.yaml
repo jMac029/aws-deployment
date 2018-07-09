@@ -1,8 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: >-
-  AWS CloudFormation Template VPC_Single_Instance_In_Subnet: Sample
-  template showing how to create a VPC and add an EC2 instance with an Elastic
-  IP address and a security group.
+# ***Needs to Be Added adjusted***
+# NAT Gateway for Private Subnet Instances
+# Private Instance in the Private Subnet
+# Bastion Host Instance for SSH access to Private Subnet
+# Health Checks on Target Groups to check for index.html
+# Fix Error on HealthChecks in ASG and ELB
+# Scaling Policies based on CPU Utilization for ASG
+# Add IAM Policy for S3 Access
 Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
@@ -88,9 +92,7 @@ Resources:
   SubnetRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: 
-        - !Ref PublicSubnet1
-        - !Ref PublicSubnet2
+      SubnetId: !Ref PublicSubnet1
       RouteTableId: !Ref RouteTable
   NetworkAcl:
     Type: 'AWS::EC2::NetworkAcl'
@@ -174,9 +176,7 @@ Resources:
   SubnetNetworkAclAssociation:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
-      SubnetId: 
-        - !Ref: PublicSubnet1
-        - !Ref: PublicSubnet2
+      SubnetId: !Ref PublicSubnet1
       NetworkAclId: !Ref NetworkAcl
   IPAddress:
     Type: 'AWS::EC2::EIP'
@@ -201,8 +201,8 @@ Resources:
     Type: 'AWS::AutoScaling::AutoScalingGroup'
     Properties:
       VPCZoneIdentifier: 
-        - !Ref: PublicSubnet1
-        - !Ref: PublicSubnet2
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
       LaunchConfigurationName: !Ref LaunchConfig
       MinSize: '2'
       MaxSize: '6'
@@ -248,8 +248,8 @@ Resources:
     Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
     Properties:
       Subnets: 
-        - !Ref: PublicSubnet1
-        - !Ref: PublicSubnet2
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
       SecurityGroups:
         - !Ref LoadBalancerSecurityGroup
   ALBListener:
