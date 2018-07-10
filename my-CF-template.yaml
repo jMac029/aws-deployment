@@ -1,8 +1,4 @@
 AWSTemplateFormatVersion: 2010-09-09
-# ***Needs to Be Added adjusted***
-# Health Checks on Target Groups to check for index.html
-# Fix Error on HealthChecks in ASG and ELB
-# Scaling Policies based on CPU Utilization for ASG
 Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
@@ -88,10 +84,20 @@ Resources:
       RouteTableId: !Ref RouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
-  SubnetRouteTableAssociation:
+  SubnetRouteTableAssociation1:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref RouteTable
+  SubnetRouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref RouteTable
+  SubnetRouteTableAssociation3:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PrivateSubnet
       RouteTableId: !Ref RouteTable
   NetworkAcl:
     Type: 'AWS::EC2::NetworkAcl'
@@ -172,10 +178,20 @@ Resources:
       PortRange:
         From: '1024'
         To: '65535'
-  SubnetNetworkAclAssociation:
+  SubnetNetworkAclAssociation1:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
       SubnetId: !Ref PublicSubnet1
+      NetworkAclId: !Ref NetworkAcl
+  SubnetNetworkAclAssociation2:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      NetworkAclId: !Ref NetworkAcl
+  SubnetNetworkAclAssociation3:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      SubnetId: !Ref PrivateSubnet
       NetworkAclId: !Ref NetworkAcl
   IPAddress:
     Type: 'AWS::EC2::EIP'
@@ -195,16 +211,6 @@ Resources:
       DesiredCapacity: '2'
       TargetGroupARNs:
         - !Ref ALBTargetGroup
-    CreationPolicy:
-      ResourceSignal:
-        Timeout: PT15M
-        Count: '1'
-    UpdatePolicy:
-      AutoScalingRollingUpdate:
-        MinInstancesInService: '1'
-        MaxBatchSize: '6'
-        PauseTime: PT15M
-        WaitOnResourceSignals: 'true'
   LaunchConfig:
     Type: 'AWS::AutoScaling::LaunchConfiguration'
     Properties:
@@ -223,11 +229,11 @@ Resources:
             cd /etc/httpd/conf
             cp httpd.conf httpdconfbackup.conf
             rm -rf httpd.conf
-            wget https://s3-us-west-1.amazonaws.com/jmac-bucket/httpd.conf
+            wget https://s3-us-west-2.amazonaws.com/jdm-mini-bucket/httpd.conf
             cd /var/www/html
             git clone https://github.com/jMac029/aws-website-deploy.git
             cd /etc
-            wget https://s3-us-west-1.amazonaws.com/jmac-bucket/crontab
+            wget https://s3-us-west-2.amazonaws.com/jdm-mini-bucket/crontab
             service httpd start
             chkconfig httpd on
   # Auto Scaling Policy Config
@@ -236,15 +242,15 @@ Resources:
     Properties:
       AdjustmentType: ChangeInCapacity
       AutoScalingGroupName: !Ref WebServerGroup
-      Cooldown: '60'
-      ScalingAdjustment: '1'
+      Cooldown: '300'
+      ScalingAdjustment: '2'
   WebServerScaleDownPolicy:
     Type: 'AWS::AutoScaling::ScalingPolicy'
     Properties:
       AdjustmentType: ChangeInCapacity
       AutoScalingGroupName: !Ref WebServerGroup
-      Cooldown: '60'
-      ScalingAdjustment: '-1'
+      Cooldown: '300'
+      ScalingAdjustment: '-2'
   CPUAlarmHigh:
     Type: 'AWS::CloudWatch::Alarm'
     Properties:
@@ -299,11 +305,12 @@ Resources:
     Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
     Properties:
       HealthCheckIntervalSeconds: 30
-      HealthCheckTimeoutSeconds: 25
-      HealthyThresholdCount: 3
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 4
+      HealthCheckPath: /index.html
       Port: 80
       Protocol: HTTP
-      UnhealthyThresholdCount: 5
+      UnhealthyThresholdCount: 3
       VpcId: !Ref VPC
   # Security Group Config for Load Balancer
   LoadBalancerSecurityGroup:
