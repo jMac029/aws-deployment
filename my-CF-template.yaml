@@ -227,7 +227,7 @@ Resources:
           !Sub |
             #!/bin/bash -xe
             yum update -y
-            yum install httpd git stress -y
+            yum install httpd php git stress -y
             cd /etc/httpd/conf
             cp httpd.conf httpdconfbackup.conf
             rm -rf httpd.conf
