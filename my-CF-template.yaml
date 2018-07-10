@@ -209,6 +209,8 @@ Resources:
       MinSize: '2'
       MaxSize: '6'
       DesiredCapacity: '2'
+      HealthCheckGracePeriod: '30'
+      HealthCheckType: ELB
       TargetGroupARNs:
         - !Ref ALBTargetGroup
   LaunchConfig:
@@ -307,7 +309,7 @@ Resources:
       HealthCheckIntervalSeconds: 30
       HealthCheckTimeoutSeconds: 10
       HealthyThresholdCount: 4
-      HealthCheckPath: /index.html
+      HealthCheckPath: /index.php
       Port: 80
       Protocol: HTTP
       UnhealthyThresholdCount: 3
