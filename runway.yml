@@ -1,0 +1,10 @@
+# see full syntax at https://github.com/onicagroup/runway
+
+deployments:
+    - modules:
+        - my_core.cfn
+        - my_simple_web.cfn
+      regions:
+        us-west-2
+      account-id:
+        demo: 322420627105
