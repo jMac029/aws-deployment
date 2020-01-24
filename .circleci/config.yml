@@ -1,13 +1,58 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
+
+jobs:
+  deploy:
+      executor: basic_image
+      parameters:
+        deploy_environment:
+          type: string
+        deploy_region:
+          type: string
+      steps:
+        - run:
+            name: Deploying with runway
+            working_directory: runway/
+            no_output_timeout: 30m
+            environment:
+              CI: false
+            command: |
+              export PATH=$PATH:$HOME/.local/bin
+              pip install --user pipenv
+              pipenv install --skip-lock
+              ./runway.yml.sh << parameters.deploy_region >> > runway.yml
+              DEPLOY_ENVIRONMENT=<< parameters.deploy_environment >> pipenv run runway deploy
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  version: 2
+  build_and_package:
     jobs:
-      - welcome/run
+      - build
+      - deploy:
+          name: deploy_common
+          deploy_environment: common
+          deploy_region: us-west-2
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+      - deploy:
+          name: deploy_demo
+          deploy_environment: demo
+          deploy_region: us-west-2
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - ENV-demo
+      - deploy:
+          name: deploy_prod
+          deploy_environment: prod
+          deploy_region: us-west-2
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - ENV-prod
