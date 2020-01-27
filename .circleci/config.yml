@@ -14,7 +14,7 @@ jobs:
             working_directory: runway/
             no_output_timeout: 30m
             environment:
-              CI: false
+              CI: true
             command: |
               export PATH=$PATH:$HOME/.local/bin
               pip install --user pipenv
