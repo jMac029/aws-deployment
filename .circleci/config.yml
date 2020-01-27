@@ -1,26 +1,26 @@
 version: 2.1
 
 jobs:
-  deploy:
-      executor: basic_image
-      parameters:
-        deploy_environment:
-          type: string
-        deploy_region:
-          type: string
-      steps:
-        - run:
-            name: Deploying with runway
-            working_directory: runway/
-            no_output_timeout: 30m
-            environment:
-              CI: true
-            command: |
-              export PATH=$PATH:$HOME/.local/bin
-              pip install --user pipenv
-              pipenv install --skip-lock
-              ./runway.yml.sh << parameters.deploy_region >> > runway.yml
-              DEPLOY_ENVIRONMENT=<< parameters.deploy_environment >> pipenv run runway deploy
+  build:
+    executor: basic_image
+    parameters:
+      deploy_environment:
+        type: string
+      deploy_region:
+        type: string
+    steps:
+      - run:
+          name: Deploying with runway
+          working_directory: runway/
+          no_output_timeout: 30m
+          environment:
+            CI: true
+          command: |
+            export PATH=$PATH:$HOME/.local/bin
+            pip install --user pipenv
+            pipenv install --skip-lock
+            ./runway.yml.sh << parameters.deploy_region >> > runway.yml
+            DEPLOY_ENVIRONMENT=<< parameters.deploy_environment >> pipenv run runway deploy
 workflows:
   build:
     jobs:
