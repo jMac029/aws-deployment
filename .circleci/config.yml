@@ -22,8 +22,7 @@ jobs:
               ./runway.yml.sh << parameters.deploy_region >> > runway.yml
               DEPLOY_ENVIRONMENT=<< parameters.deploy_environment >> pipenv run runway deploy
 workflows:
-  version: 2
-  build_and_package:
+  build:
     jobs:
       - build
       - deploy:
