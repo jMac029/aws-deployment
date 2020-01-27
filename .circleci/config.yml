@@ -3,6 +3,18 @@ version: 2.1
 jobs:
   build:
     executor: basic_image
+    steps:
+      - setup_env
+      - run:
+          name: Run unit tests
+      - store_test_results:
+          path: test/reports
+      - store_artifacts:
+          path: tmp/screenshots
+          destination: screenshots
+
+  deploy:
+    executor: basic_image
     parameters:
       deploy_environment:
         type: string
@@ -21,11 +33,12 @@ jobs:
             pipenv install --skip-lock
             ./runway.yml.sh << parameters.deploy_region >> > runway.yml
             DEPLOY_ENVIRONMENT=<< parameters.deploy_environment >> pipenv run runway deploy
+
 workflows:
-  build:
+  build_and_deploy:
     jobs:
       - build
-      - build:
+      - deploy:
           name: deploy_common
           deploy_environment: common
           deploy_region: us-west-2
@@ -35,7 +48,7 @@ workflows:
             branches:
               only:
                 - master
-      - build:
+      - deploy:
           name: deploy_demo
           deploy_environment: demo
           deploy_region: us-west-2
@@ -45,7 +58,7 @@ workflows:
             branches:
               only:
                 - ENV-demo
-      - build:
+      - deploy:
           name: deploy_prod
           deploy_environment: prod
           deploy_region: us-west-2
