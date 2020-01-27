@@ -25,7 +25,7 @@ workflows:
   build:
     jobs:
       - build
-      - deploy:
+      - build:
           name: deploy_common
           deploy_environment: common
           deploy_region: us-west-2
@@ -35,7 +35,7 @@ workflows:
             branches:
               only:
                 - master
-      - deploy:
+      - build:
           name: deploy_demo
           deploy_environment: demo
           deploy_region: us-west-2
@@ -45,7 +45,7 @@ workflows:
             branches:
               only:
                 - ENV-demo
-      - deploy:
+      - build:
           name: deploy_prod
           deploy_environment: prod
           deploy_region: us-west-2
