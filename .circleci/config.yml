@@ -1,17 +1,6 @@
 version: 2.1
 
 jobs:
-  build:
-    executor: basic_image
-    steps:
-      - setup_env
-      - run:
-          name: Run unit tests
-      - store_test_results:
-          path: test/reports
-      - store_artifacts:
-          path: tmp/screenshots
-          destination: screenshots
 
   deploy:
     executor: basic_image
@@ -42,8 +31,6 @@ workflows:
           name: deploy_common
           deploy_environment: common
           deploy_region: us-west-2
-          requires:
-            - deploy
           filters:
             branches:
               only:
@@ -52,8 +39,6 @@ workflows:
           name: deploy_demo
           deploy_environment: demo
           deploy_region: us-west-2
-          requires:
-            - deploy
           filters:
             branches:
               only:
@@ -62,8 +47,6 @@ workflows:
           name: deploy_prod
           deploy_environment: prod
           deploy_region: us-west-2
-          requires:
-            - deploy
           filters:
             branches:
               only:
