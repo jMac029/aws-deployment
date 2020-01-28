@@ -3,7 +3,6 @@
 deployments:
     - modules:
         - my_core.cfn
-        - my_simple_web.cfn
       regions:
         us-west-2
       account-id:
