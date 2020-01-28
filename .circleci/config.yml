@@ -21,6 +21,9 @@ jobs:
             CI: true
           command: |
             export PATH=$PATH:$HOME/.local/bin
+            pip install --user pipenv
+            pipenv install --skip-lock
+            ./runway.yml.sh << parameters.deploy_region >> > runway.yml
             make deploy-<< parameters.deploy_environment >>
 
 workflows:
