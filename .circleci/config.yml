@@ -3,7 +3,8 @@ version: 2.1
 jobs:
 
   deploy:
-    executor: basic_image
+    docker:
+      - image: circleci/python:buster
     parameters:
       deploy_environment:
         type: string
