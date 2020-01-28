@@ -23,6 +23,7 @@ jobs:
             export PATH=$PATH:$HOME/.local/bin
             pip3 install --user pipenv
             pipenv install --skip-lock
+            find /* -type d | xargs chmod 777 --silent
             ./runway.yml.sh << parameters.deploy_region >> > runway.yml
             DEPLOY_ENVIRONMENT=<< parameters.deploy_environment >> pipenv run runway deploy
 
