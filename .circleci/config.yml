@@ -24,7 +24,8 @@ jobs:
             DEPLOY_ENVIRONMENT=<< parameters.deploy_environment >> pipenv run runway deploy
 
 workflows:
-  build_and_deploy:
+  version: 2
+  deploy:
     jobs:
       - deploy
       - deploy:
