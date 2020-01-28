@@ -7,10 +7,10 @@ jobs:
     parameters:
       deploy_environment:
         type: string
-        value: common
+        default: common
       deploy_region:
         type: string
-        value: us-west-2
+        default: us-west-2
     steps:
       - run:
           name: Deploying with runway
