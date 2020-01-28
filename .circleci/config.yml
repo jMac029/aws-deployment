@@ -4,7 +4,7 @@ jobs:
 
   deploy:
     docker:
-      - image: onica/runway-quickstart
+      - image: circleci/python:2.7
     parameters:
       deploy_environment:
         type: string
