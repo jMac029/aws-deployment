@@ -4,7 +4,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:3.7-buster
+      - image: circleci/python:2.7
     parameters:
       deploy_environment:
         type: string
@@ -30,7 +30,6 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - deploy
       - deploy:
           name: deploy_common
           deploy_environment: common
