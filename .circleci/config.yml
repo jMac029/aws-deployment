@@ -4,7 +4,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:buster
+      - image: circleci/python:3.7-buster
     parameters:
       deploy_environment:
         type: string
@@ -15,7 +15,7 @@ jobs:
     steps:
       - run:
           name: Deploying with runway
-          working_directory: runway/
+          working_directory: /
           no_output_timeout: 30m
           environment:
             CI: true
