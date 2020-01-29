@@ -111,8 +111,8 @@ Resources:
   AttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
-      VpcId: !GetAtt VPC
-      InternetGatewayId: !GetAtt InternetGateway
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
   RouteTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -126,29 +126,29 @@ Resources:
     Type: 'AWS::EC2::Route'
     DependsOn: AttachGateway
     Properties:
-      RouteTableId: !GetAtt RouteTable
+      RouteTableId: !Ref RouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !GetAtt InternetGateway
+      GatewayId: !Ref InternetGateway
   SubnetRouteTableAssociation1:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !GetAtt PublicSubnet1
-      RouteTableId: !GetAtt RouteTable
+      SubnetId: !Ref PubSubnet1
+      RouteTableId: !Ref RouteTable
   SubnetRouteTableAssociation2:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !GetAtt PublicSubnet2
-      RouteTableId: !GetAtt RouteTable
+      SubnetId: !Ref PubSubnet2
+      RouteTableId: !Ref RouteTable
   SubnetRouteTableAssociation3:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !GetAtt PrivateSubnet1
-      RouteTableId: !GetAtt RouteTable
+      SubnetId: !Ref PriSubnet1
+      RouteTableId: !Ref RouteTable
   SubnetRouteTableAssociation4:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !GetAtt PrivateSubnet2
-      RouteTableId: !GetAtt RouteTable
+      SubnetId: !Ref PriSubnet2
+      RouteTableId: !Ref RouteTable
   NetworkAcl:
     Type: 'AWS::EC2::NetworkAcl'
     Properties:
@@ -246,22 +246,22 @@ Resources:
   SubnetNetworkAclAssociation1:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
-      SubnetId: !Ref PublicSubnet1
+      SubnetId: !Ref PubSubnet1
       NetworkAclId: !Ref NetworkAcl
   SubnetNetworkAclAssociation2:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
-      SubnetId: !Ref PublicSubnet2
+      SubnetId: !Ref PubSubnet2
       NetworkAclId: !Ref NetworkAcl
   SubnetNetworkAclAssociation3:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
-      SubnetId: !Ref PrivateSubnet1
+      SubnetId: !Ref PriSubnet1
       NetworkAclId: !Ref NetworkAcl
   SubnetNetworkAclAssociation4:
     Type: 'AWS::EC2::SubnetNetworkAclAssociation'
     Properties:
-      SubnetId: !Ref PrivateSubnet2
+      SubnetId: !Ref PriSubnet2
       NetworkAclId: !Ref NetworkAcl
   EIPAddress:
     Type: 'AWS::EC2::EIP'
@@ -279,16 +279,16 @@ Outputs:
     Value: !GetAtt CidrBlock
   PubSubnet1:
     Description: PublicSubnet1 ID
-    Value: !GetAtt PublicSubnet1
+    Value: !GetAtt PubSubnet1
   PubSubnet2:
     Description: PublicSubnet2 ID
-    Value: !GetAtt PublicSubnet2
+    Value: !GetAtt PubSubnet2
   PriSubnet1:
     Description: PrivateSubnet1 ID
-    Value: !GetAtt PrivateSubnet1
+    Value: !GetAtt PriSubnet1
   PriSubnet2:
     Description: PrivateSubnet2 ID
-    Value: !GetAtt PrivateSubnet2
+    Value: !GetAtt PriSubnet2
   NATElasticIP:
     Description: ElasticIP for NAT GatewayId
     Value: !GetAtt EIPAddress
