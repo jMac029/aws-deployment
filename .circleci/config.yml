@@ -19,6 +19,7 @@ jobs:
             CI: true
           command: |
             export PATH=$PATH:$HOME/.local/bin
+            git clone https://github.com/jMac029/aws-deployment.git ~/project
             pipenv install --skip-lock
             make deploy-<< parameters.deploy_environment >>
 
