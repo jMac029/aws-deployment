@@ -24,7 +24,6 @@ jobs:
             pip install --upgrade setuptools
             pip install --user pipenv
             pipenv install --skip-lock
-            find /* -type f | xargs chmod 777 --silent
             make deploy-<< parameters.deploy_environment >>
 
 workflows:
