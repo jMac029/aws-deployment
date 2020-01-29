@@ -152,7 +152,7 @@ Resources:
   NetworkAcl:
     Type: 'AWS::EC2::NetworkAcl'
     Properties:
-      VpcId: !GetAtt VPC
+      VpcId: !Ref VPC
       Tags:
         - Key: Application
           Value: !Ref ApplicationName
@@ -274,9 +274,6 @@ Outputs:
   VpcId:
     Description: ID of the VPC
     Value: !GetAtt VPC
-  CidrBlock:
-    Description: Set of IP addresses for the VPC
-    Value: !GetAtt CidrBlock
   PubSubnet1:
     Description: PublicSubnet1 ID
     Value: !GetAtt PubSubnet1
