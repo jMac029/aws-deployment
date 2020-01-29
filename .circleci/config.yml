@@ -21,6 +21,9 @@ jobs:
             CI: true
           command: |
             export PATH=$PATH:$HOME/.local/bin
+            sudo apt-get -y -qq update
+            sudo apt-get install python-pip python-dev build-essential
+            pip install --upgrade setuptools
             pip install --user pipenv
             pipenv install --skip-lock
             make deploy-<< parameters.deploy_environment >>
