@@ -44,7 +44,7 @@ Resources:
           Value: !Ref 'AWS::StackId'
         - Key: Application
           Value: !Ref ApplicationName
-  PublicSubnet1:
+  PubSubnet1:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
@@ -58,7 +58,7 @@ Resources:
           Value: !Ref ApplicationName
         - Key: CFStackID
           Value: !Ref 'AWS::StackId'
-  PublicSubnet2:
+  PubSubnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
@@ -72,7 +72,7 @@ Resources:
           Value: !Ref ApplicationName
         - Key: CFStackID
           Value: !Ref 'AWS::StackId'
-  PrivateSubnet1:
+  PriSubnet1:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
@@ -86,7 +86,7 @@ Resources:
           Value: !Ref ApplicationName
         - Key: CFStackID
           Value: !Ref 'AWS::StackId'
-  PrivateSubnet2:
+  PriSubnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
