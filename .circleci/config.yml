@@ -4,7 +4,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/ruby:2.6.3-node-browsers
+      - image: circleci/python:2.7
     parameters:
       deploy_environment:
         type: string
@@ -13,16 +13,12 @@ jobs:
     steps:
       - run:
           name: Deploying with runway
-          working_directory: ~/repo
+          working_directory: ~/project
           no_output_timeout: 30m
           environment:
             CI: true
           command: |
             export PATH=$PATH:$HOME/.local/bin
-            sudo apt-get -y -qq update
-            sudo apt-get install python-pip python-dev build-essential
-            pip install --upgrade setuptools
-            pip install --user pipenv
             pipenv install --skip-lock
             make deploy-<< parameters.deploy_environment >>
 
