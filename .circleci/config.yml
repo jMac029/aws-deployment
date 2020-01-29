@@ -4,7 +4,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:2.7
+      - image: circleci/ruby:2.6.3-node-browsers
     parameters:
       deploy_environment:
         type: string
@@ -23,7 +23,6 @@ jobs:
             export PATH=$PATH:$HOME/.local/bin
             pip install --user pipenv
             pipenv install --skip-lock
-            ./runway.yml.sh << parameters.deploy_region >> > runway.yml
             make deploy-<< parameters.deploy_environment >>
 
 workflows:
