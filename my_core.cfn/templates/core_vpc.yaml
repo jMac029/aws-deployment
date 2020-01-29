@@ -270,22 +270,22 @@ Resources:
       Domain: vpc
 
 
-# Outputs:
-#   VpcId:
-#     Description: ID of the VPC
-#     Value: !GetAtt VPC
-#   PubSubnet1:
-#     Description: PublicSubnet1 ID
-#     Value: !GetAtt PubSubnet1
-#   PubSubnet2:
-#     Description: PublicSubnet2 ID
-#     Value: !GetAtt PubSubnet2
-#   PriSubnet1:
-#     Description: PrivateSubnet1 ID
-#     Value: !GetAtt PriSubnet1
-#   PriSubnet2:
-#     Description: PrivateSubnet2 ID
-#     Value: !GetAtt PriSubnet2
-#   NATElasticIP:
-#     Description: ElasticIP for NAT GatewayId
-#     Value: !GetAtt EIPAddress
+Outputs:
+  VpcId:
+    Description: ID of the VPC
+    Value: !Ref VPC
+  PubSubnet1:
+    Description: PublicSubnet1 ID
+    Value: !Ref PubSubnet1
+  PubSubnet2:
+    Description: PublicSubnet2 ID
+    Value: !Ref PubSubnet2
+  PriSubnet1:
+    Description: PrivateSubnet1 ID
+    Value: !Ref PriSubnet1
+  PriSubnet2:
+    Description: PrivateSubnet2 ID
+    Value: !Ref PriSubnet2
+  NATElasticIP:
+    Description: ElasticIP for NAT GatewayId
+    Value: !Ref EIPAddress
