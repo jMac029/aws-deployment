@@ -8,14 +8,12 @@ jobs:
     parameters:
       deploy_environment:
         type: string
-        default: common
       deploy_region:
         type: string
-        default: us-west-2
     steps:
       - run:
           name: Deploying with runway
-          working_directory: /
+          working_directory: ~/repo
           no_output_timeout: 30m
           environment:
             CI: true
