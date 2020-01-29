@@ -4,7 +4,7 @@ deployments:
     - modules:
         - my_core.cfn
       regions:
-        us-west-2
+        - us-west-2
         
         
 # quick comment to test pushing from working copy
