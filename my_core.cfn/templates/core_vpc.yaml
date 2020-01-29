@@ -111,8 +111,8 @@ Resources:
   AttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
-      VpcId: !Ref VPC
-      InternetGatewayId: !Ref InternetGateway
+      VpcId: !GetAtt VPC
+      InternetGatewayId: !GetAtt InternetGateway
   RouteTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -126,33 +126,33 @@ Resources:
     Type: 'AWS::EC2::Route'
     DependsOn: AttachGateway
     Properties:
-      RouteTableId: !Ref RouteTable
+      RouteTableId: !GetAtt RouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref InternetGateway
+      GatewayId: !GetAtt InternetGateway
   SubnetRouteTableAssociation1:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref PublicSubnet1
-      RouteTableId: !Ref RouteTable
+      SubnetId: !GetAtt PublicSubnet1
+      RouteTableId: !GetAtt RouteTable
   SubnetRouteTableAssociation2:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref PublicSubnet2
-      RouteTableId: !Ref RouteTable
+      SubnetId: !GetAtt PublicSubnet2
+      RouteTableId: !GetAtt RouteTable
   SubnetRouteTableAssociation3:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref PrivateSubnet1
-      RouteTableId: !Ref RouteTable
+      SubnetId: !GetAtt PrivateSubnet1
+      RouteTableId: !GetAtt RouteTable
   SubnetRouteTableAssociation4:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref PrivateSubnet2
-      RouteTableId: !Ref RouteTable
+      SubnetId: !GetAtt PrivateSubnet2
+      RouteTableId: !GetAtt RouteTable
   NetworkAcl:
     Type: 'AWS::EC2::NetworkAcl'
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !GetAtt VPC
       Tags:
         - Key: Application
           Value: !Ref ApplicationName
@@ -277,18 +277,18 @@ Outputs:
   CidrBlock:
     Description: Set of IP addresses for the VPC
     Value: !GetAtt CidrBlock
-  PublicSubnet1:
+  PubSubnet1:
     Description: PublicSubnet1 ID
     Value: !GetAtt PublicSubnet1
-  PublicSubnet2:
+  PubSubnet2:
     Description: PublicSubnet2 ID
     Value: !GetAtt PublicSubnet2
-  PrivateSubnet1:
+  PriSubnet1:
     Description: PrivateSubnet1 ID
     Value: !GetAtt PrivateSubnet1
-  PrivateSubnet2:
+  PriSubnet2:
     Description: PrivateSubnet2 ID
     Value: !GetAtt PrivateSubnet2
-  InternetGateway:
-    Description: InternetGateway ID
-    Value: !GetAtt InternetGateway
+  NATElasticIP:
+    Description: ElasticIP for NAT GatewayId
+    Value: !GetAtt EIPAddress
