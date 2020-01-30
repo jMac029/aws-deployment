@@ -91,7 +91,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: us-west-2b
-      CidrBlock: !Ref PrivateSubnet1
+      CidrBlock: !Ref PrivateSubnet2
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
